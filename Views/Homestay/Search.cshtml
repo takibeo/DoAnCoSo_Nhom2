@@ -1,0 +1,122 @@
+﻿@model List<DoAnCoSo_Nhom2.Models.Homestay>
+
+<style>
+       html, body {
+        height: 100%;
+        margin: 0;
+    }
+    body {
+        background: linear-gradient(135deg, #F5EDE1, #feb47b);
+        font-family: Arial, sans-serif;
+        padding-top: 30px;
+    }
+
+    .filter-section {
+        background-color: #A27B5C;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        color: #F9CB43;
+        margin-bottom: 30px;
+    }
+
+    h2.title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 28px;
+        color: #4E1F00;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
+        margin-bottom: 30px;
+        
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background: #A27B5C;
+        color: #F6DC43;
+        transition: transform 0.3s;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+    .btn-info {
+        background-color: #FFF3C7;
+        color: #4E1F00;
+        border: none;
+    }
+
+        .btn-info:hover {
+            background-color: #F2E2B1;
+        }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+</style>
+
+<h2 class="title">Kết quả tìm kiếm</h2>
+
+<div class="container filter-section">
+    <form asp-action="Search" method="get">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label"><i class="bi bi-house"></i> Tên Homestay:</label>
+                <input type="text" name="name" class="form-control" placeholder="Nhập tên Homestay" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label"><i class="bi bi-geo-alt"></i> Địa điểm:</label>
+                <input type="text" name="city" class="form-control" placeholder="Nhập thành phố" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label"><i class="bi bi-cash-coin"></i> Giá tối đa (VND):</label>
+                <input type="number" name="maxPrice" class="form-control" placeholder="Nhập giá tối đa" />
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-success w-100"><i class="bi bi-search"></i> Tìm kiếm</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        @if (Model.Any())
+        {
+            @foreach (var homeStay in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="@(homeStay.Images?.FirstOrDefault() ?? "/images/default.jpg")" class="card-img-top" alt="@homeStay.Name" onerror="this.src='/images/default.jpg';" />
+                        <div class="card-body">
+                            <h4 class="card-title" style="font-weight:bold; color:#FFB200">@homeStay.Name</h4>
+                            <p class="card-text">@homeStay.Address, @homeStay.City</p>
+                            <p><strong>Giá:</strong> @homeStay.PricePerNight.ToString("N0") VND / đêm</p>
+                            <p><strong>Đánh giá:</strong> @(homeStay.Reviews.Any() ? homeStay.Reviews.Average(r => r.Rating).ToString("F1") : "Chưa có đánh giá") sao</p>
+                            <a asp-controller="Homestay" asp-action="Details" asp-route-id="@homeStay.Id" class="btn btn-info">Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <p class="text-center text-danger fs-5 mt-4">Không tìm thấy Homestay phù hợp.</p>
+            </div>
+        }
+
+    </div>
+</div>
