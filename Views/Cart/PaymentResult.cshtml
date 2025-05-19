@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Kết quả thanh toán";
+}
+
+<h2>Kết quả thanh toán</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div style="color: green;">@ViewBag.Message</div>
+}
+@if (ViewBag.Error != null)
+{
+    <div style="color: red;">@ViewBag.Error</div>
+}
